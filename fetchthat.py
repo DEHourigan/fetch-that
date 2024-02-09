@@ -56,9 +56,9 @@ def fetch_sequences(email, db, infile, outfile):
     missing_accessions = requested_accessions - downloaded_accessions
 
     if missing_accessions:
-        logging.warning(f"Missing sequences for {len(missing_accessions)} accession(s): {', '.join(missing_accessions)}")
+        logging.warning(f"Ahhh fetch! Missing sequences for {len(missing_accessions)} accession(s): {', '.join(missing_accessions)}")
     else:
-        logging.info("All sequences successfully downloaded.")
+        logging.info("fetchthat fetched all successfully.")
 
     return missing_accessions
 
