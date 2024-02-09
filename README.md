@@ -1,7 +1,7 @@
 ## fetch that
 A tool to fetch protein and nucleotide sequences using Entrez from Biopython
 
-![Example of](data/smash1.jpeg "Example Plot1")
+![Example of](data/fetchthat.png "Example Plot1")
 
 
 
@@ -49,6 +49,4 @@ For any queries, please reach out via GitHub issues or directly to `114402828@um
 
 ---
 
-
----
 
