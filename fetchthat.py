@@ -23,19 +23,23 @@ def check_conda_environment(env_name='fetchthat'):
         subprocess.run(['conda', 'env', 'list'], check=True)
         logging.info(f"Conda environment '{env_name}' is assumed to be set up.")
     except subprocess.CalledProcessError:
-        logging.error(f"Conda environment '{env_name}' is not setup correctly. Please check.")
+        logging.error(f"Conda environment '{env_name}' is not set up correctly. Please check.")
+
+def extract_accession_from_header(header):
+    """Extract accession number from FASTA header."""
+    return header.split("|")[1] if "|" in header else header.split()[0]
 
 def fetch_sequences(email, db, infile, outfile):
     Entrez.email = email
-    accession_numbers = []
+    requested_accessions = set()
 
     with open(infile, 'r') as f:
-        accession_numbers = [line.strip() for line in f.readlines()]
+        requested_accessions = {line.strip() for line in f.readlines()}
 
     sequences = []
     db_name = 'protein' if db == 'prot' else 'nucleotide'
 
-    for accession in tqdm(accession_numbers, desc="Fetching sequences"):
+    for accession in tqdm(requested_accessions, desc="Fetching sequences"):
         try:
             handle = Entrez.efetch(db=db_name, id=accession, rettype="fasta", retmode="text")
             record = SeqIO.read(handle, "fasta")
@@ -47,8 +51,19 @@ def fetch_sequences(email, db, infile, outfile):
     SeqIO.write(sequences, outfile, "fasta")
     logging.info(f"Sequences saved to {outfile}")
 
+    # Check for missing sequences
+    downloaded_accessions = set(extract_accession_from_header(seq.id) for seq in sequences)
+    missing_accessions = requested_accessions - downloaded_accessions
+
+    if missing_accessions:
+        logging.warning(f"Missing sequences for {len(missing_accessions)} accession(s): {', '.join(missing_accessions)}")
+    else:
+        logging.info("All sequences successfully downloaded.")
+
+    return missing_accessions
 
 if __name__ == "__main__":
     args = parse_arguments()
     check_conda_environment()
-    fetch_sequences(args.email, args.db, args.infile, args.outfile)
+    missing_accessions = fetch_sequences(args.email, args.db, args.infile, args.outfile)
+    # Additional logic to handle missing_accessions if necessary
