@@ -2,6 +2,7 @@
 A tool to fetch protein and nucleotide sequences using Entrez from Biopython
 
 ![Example of](data/fetchthat.png "Example Plot1")
+Image created using DALL-E
 
 
 
