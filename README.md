@@ -28,7 +28,7 @@ A tool to fetch protein and nucleotide sequences using Entrez from Biopython
 
 ## Usage
 ```bash
-python fetchthat.py --infile test_data/protein_acc.txt --db prot --email[email here] --outfile test_data/out.faa
+python fetchthat.py --infile test_data/protein_acc.txt --db prot --email   [email here] --outfile test_data/out.faa
 ```
 
 1. Prepare your data:
